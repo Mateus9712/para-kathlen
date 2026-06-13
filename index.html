@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tenho uma pergunta importante...</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@500;800&display=swap');
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffe6e6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #121214; /* Fundo escuro moderno estilo app */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,73 +19,87 @@
         }
 
         .container {
-            background-color: white;
-            padding: 30px;
+            background-color: #1a1a1e; /* Card destacado */
+            padding: 35px 25px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 2px solid #29292e;
             text-align: center;
-            max-width: 450px;
+            max-width: 430px;
             width: 90%;
-            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .gif-container {
-            height: 180px;
+            height: 200px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            background-color: #09090a;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .gif-container img {
             max-height: 100%;
-            border-radius: 15px;
+            object-fit: contain;
         }
 
         h1 {
-            color: #d63031;
-            font-size: 22px;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 24px;
             margin-bottom: 25px;
-            min-height: 60px;
+            min-height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
+            line-height: 1.3;
         }
 
         .botoes {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            height: 100px;
+            gap: 15px;
+            height: 110px;
             position: relative;
         }
 
         button {
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 16px 32px;
+            font-size: 16px;
             font-weight: bold;
             border: none;
-            border-radius: 50px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s, font-size 0.2s;
+            transition: transform 0.2s, background-color 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         #sim {
-            background-color: #2ecc71;
-            color: white;
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+            background-color: #00ff7f; /* Verde Neon vibrante / Foco total no clique */
+            color: #0a0a0c;
+            box-shadow: 0 0 20px rgba(0, 255, 127, 0.3);
         }
 
         #sim:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
+            background-color: #00ea74;
+            box-shadow: 0 0 25px rgba(0, 255, 127, 0.5);
         }
 
         #nao {
-            background-color: #e74c3c;
-            color: white;
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+            background-color: #be0f0f;
+            color: #a9a9b3;
             position: relative;
+        }
+
+        #nao:hover {
+            background-color: #383842;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -91,7 +107,7 @@
 
     <div class="container">
         <div class="gif-container">
-            <img id="imagem-gif" src="inicio.gif" alt="Fofo inicial">
+            <img id="imagem-gif" src="inicio.gif" alt="Início">
         </div>
         
         <h1 id="pergunta">Quer namorar comigo? 🌹</h1>
@@ -109,63 +125,64 @@
         const textoPergunta = document.getElementById('pergunta');
         const imagemGif = document.getElementById('imagem-gif');
 
-        // Caminhos das imagens apontando para a sua pasta local
+        // 1. CONFIGURAÇÃO DOS SEUS ÁUDIOS LOCAIS:
+        // Coloque os nomes exatos dos seus arquivos de som aqui (devem estar no formato .mp3)
+        const somErro = "erro.mp3"; 
+        const somSucesso = "sucesso.mp3";
+
+        // Função auxiliar para tocar o som sem travar o navegador
+        function tocarSom(nomeArquivo) {
+            const audio = new Audio(nomeArquivo);
+            audio.play().catch(e => console.log("Áudio bloqueado até o primeiro clique:", e));
+        }
+
         const etapas = [
-            {
-                frase: "Acho que você clicou no botão errado Kathlen, tenta de novo... 🤔",
-                gif: "erro1.gif"
-            },
-            {
-                frase: "Como assim? Você tem certeza disso? 🤨",
-                gif: "erro2.gif"
-            },
-            {
-                frase: "Vou fingir que não vi esse clique, kathlen. Vai, tenta o outro! 🥺",
-                gif: "erro3.gif"
-            },
-            {
-                frase: "Cuidado, o botão está sumindo! Diz sim logo! 😰",
-                gif: "erro4.gif"
-            },
-            {
-                frase: "Ih, travou o botão do Não, só sobrou um... 🤷‍♂️",
-                gif: "erro5.gif"
-            }
+            { frase: "Acho que você clicou no botão errado Kathlen, tenta de novo... 🤔", gif: "erro1.gif" },
+            { frase: "Como assim? Você tem certeza disso? 🤨", gif: "erro2.gif" },
+            { frase: "Vou fingir que não vi esse clique, Kathlen. Vai, tenta o outro! 🥺", gif: "erro3.gif" },
+            { frase: "Cuidado, o botão está sumindo! Diz sim logo! 😰", gif: "erro4.gif" },
+            { frase: "Ih, travou o botão do Não, só sobrou um... 🤷‍♂️", gif: "erro5.gif" }
         ];
 
         function recusou() {
             cliques++;
+            
+            // 2. ADICIONADO: Toca o áudio de erro a cada clique no "Não"
+            tocarSom(somErro);
             
             if (cliques <= etapas.length) {
                 textoPergunta.innerText = etapas[cliques - 1].frase;
                 imagemGif.src = etapas[cliques - 1].gif;
             }
 
-            let escalaNao = 1 - (cliques * 0.18);
+            let scalaNao = 1 - (cliques * 0.18);
             let escalaSim = 1 + (cliques * 0.15);
 
-            botaoNao.style.transform = `scale(${escalaNao})`;
+            botaoNao.style.transform = `scale(${scalaNao})`;
             botaoSim.style.transform = `scale(${escalaSim})`;
 
-            const x = Math.random() * 120 - 60;
-            const y = Math.random() * 80 - 40;
+            const x = Math.random() * 140 - 70;
+            const y = Math.random() * 90 - 45;
             botaoNao.style.left = `${x}px`;
             botaoNao.style.top = `${y}px`;
 
             if (cliques >= 5) {
                 botaoNao.style.display = 'none';
                 textoPergunta.innerText = "Beleza, agora você não tem escolha! Aceita? 😂❤️";
-                imagemGif.src = "intimacao.gif"; // Instancia o GIF local final do "Não"
+                imagemGif.src = "intimacao.gif";
             }
         }
 
         function aceitou() {
+            // 3. ADICIONADO: Toca o áudio de comemoração ao clicar no "SIM"
+            tocarSom(somSucesso);
+
             document.querySelector('.container').innerHTML = `
                 <div class="gif-container">
-                    <img src="sucesso.gif" alt="Casal fofo comemorando">
+                    <img src="sucesso.gif" alt="Sucesso">
                 </div>
-                <h1 style="font-size: 32px; margin-bottom: 10px;">SABIA! 😍❤️❤️</h1>
-                <p style="font-size: 18px; color: #555;">Melhor escolha da sua vida! Prepara o coração. ✨</p>
+                <h1 style="font-size: 32px; margin-bottom: 10px; color: #00ff7f;">FINALMENTE! </h1>
+                <p style="font-size: 16px; color: #a9a9b3;">Sabia que você não ia resistir. Agora é oficial! 👩🏽‍❤️‍💋‍👨🏿💘</p>
             `;
         }
     </script>
